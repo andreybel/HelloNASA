@@ -14,15 +14,17 @@ namespace HelloMauiApp.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
         
-        private INavigation _navigation;
+        public INavigation Navigation { get; set; }
         public ICommand GoBack { get; set; }
         
 
         public BaseViewModel(INavigation navigation)
         {
-            _navigation = navigation;
+            Navigation = navigation;
 
-            GoBack = new Command(() => _navigation.PopAsync());
+            GoBack = new Command(() => Navigation.PopAsync());
+
+            Initialize();
         }
 
         #region properties
@@ -58,6 +60,12 @@ namespace HelloMauiApp.ViewModels
         #endregion
 
         #region virtuals
+
+        public virtual Task Initialize(object parameter = null)
+        {
+            return Task.CompletedTask;
+        }
+
         #endregion
 
 

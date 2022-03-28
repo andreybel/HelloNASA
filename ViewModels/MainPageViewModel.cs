@@ -13,7 +13,7 @@ namespace HelloMauiApp.ViewModels
     public class MainPageViewModel : BaseViewModel
     {
         #region fields
-        public ICommand GoApod { get; set; }
+        public ICommand GoData { get; set; }
         public ICommand GoCounter { get; set; }
         
 
@@ -23,7 +23,8 @@ namespace HelloMauiApp.ViewModels
         #region ctor
         public MainPageViewModel(INavigation navigation) : base(navigation)
         {
-            GoApod = new Command(execute: () => navigation.PushAsync(new SettingsPage()));
+
+            GoData = new Command<string>(execute: (arg) => { ProcessData(arg); });
             GoCounter = new Command(execute: () => { ProcessCounter(); });
         }
 
@@ -41,6 +42,14 @@ namespace HelloMauiApp.ViewModels
         #endregion
 
         #region commands
+
+        private async Task ProcessData(string parameter)
+        {
+            if (string.IsNullOrEmpty(parameter)) return;
+                
+            await Navigation.PushAsync(new SettingsPage(parameter));
+           
+        }
 
         private void ProcessCounter()
         {

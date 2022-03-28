@@ -4,7 +4,42 @@
              x:Class="HelloMauiApp.SettingsPage"
              BackgroundColor="{DynamicResource SecondaryColor}"
              Title="{Binding Abbr, TargetNullValue='Go!'}"
-             NavigationPage.IconColor="{StaticResource SecondaryColor}">
+             NavigationPage.IconColor="{StaticResource SecondaryColor}"
+             x:Name="this">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Button" x:Key="menuButton">
+                <Setter Property="TextColor" Value="{DynamicResource SecondaryColor}"/>
+                <Setter Property="WidthRequest" Value="60"/>
+                <Setter Property="CornerRadius" Value="5"/>
+                <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="Padding" Value="0,10"/>
+                <Setter Property="Margin" Value="0,5"/>
+            </Style>
+            
+            <DataTemplate x:Key="marsImagesTemplate">
+                <Grid RowDefinitions="20,*">
+                    <Label Grid.Row="0"
+                           Text="{Binding earth_date}"/>
+                    <Image Grid.Row="1" 
+                           Source="{Binding img_src}"
+                           VerticalOptions="FillAndExpand"
+                           HorizontalOptions="FillAndExpand"
+                           Aspect="AspectFill"/>
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="cameraTypeTemplate">
+                <Button Style="{StaticResource menuButton}" 
+                        WidthRequest="100"
+                        HorizontalOptions="FillAndExpand"
+                        Text="{Binding }"
+                        Command="{Binding BindingContext.GoSelectCamera, Source={x:Reference cameras}}"
+                        CommandParameter="{Binding .}"/>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <!--TODO inplement title view-->
     <NavigationPage.TitleView>
@@ -25,10 +60,11 @@
         </Grid>
     </NavigationPage.TitleView>
 
-    <ScrollView>
-        <Grid Padding="{OnPlatform iOS='15,30,15,15', Default='15'}">
-            <StackLayout Spacing="5">
-
+    <Grid Margin="0"
+          Padding="0">
+        <ScrollView IsVisible="{Binding IsApod}">
+            <StackLayout Spacing="5"
+                             Padding="{OnPlatform iOS='15,30,15,15', Default='15'}">
                 <Label 
                     Text="{Binding Apod.date}"
                     FontSize="12"
@@ -47,11 +83,39 @@
                 <Image Source="{Binding Apod.url}"/>
 
             </StackLayout>
+        </ScrollView>
 
-            <ActivityIndicator Style="{StaticResource LoadingStyle}"/>
-
+        <Grid IsVisible="{Binding IsMars}"
+                     Margin="{OnPlatform iOS='15,30,15,15', Default='15'}"
+                     RowDefinitions="Auto, 50,*">
+            <Label Grid.Row="0"
+                   Text="Select camera:"
+                   FontAttributes="Bold"
+                   FontSize="14"
+                   Padding="0,5"/>
+            <CollectionView Grid.Row="1" 
+                            ItemsSource="{Binding CameraTypes}"
+                            ItemTemplate="{StaticResource cameraTypeTemplate}"
+                            x:Name="cameras">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal"
+                                           ItemSpacing="3"/>
+                </CollectionView.ItemsLayout>
+            </CollectionView>
+            <CollectionView Grid.Row="2"
+                            Margin="0,10"
+                        ItemsSource="{Binding MarsPhotos}"
+                        ItemTemplate="{StaticResource marsImagesTemplate}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
+                           ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+               
+            </CollectionView>
         </Grid>
         
-    </ScrollView>
+
+        <ActivityIndicator Style="{StaticResource LoadingStyle}"/>
+    </Grid>
 
 </ContentPage>

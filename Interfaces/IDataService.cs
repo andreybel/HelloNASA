@@ -10,5 +10,8 @@ namespace HelloMauiApp.Interfaces
     public interface IDataService
     {
         Task<ApodDto> GetNasaApod();
+        Task<List<EpicDto>> GetNasaEpic();
+
+        Task<MarsDto> GetMarsData(string cameraType);
     }
 }

@@ -33,19 +33,22 @@
                    Margin="0,5,0,15"/>
 
             <Button Style="{StaticResource menuButton}"
-                    Text="APOD"
+                    Text="Astronomy Picture Of the Day"
                     SemanticProperties.Hint="Astronomy Picture Of the Day"
-                    Command="{Binding GoApod}" />
+                    Command="{Binding GoData}" 
+                    CommandParameter="APOD"/>
 
-            <Button Style="{StaticResource menuButton}"
+            <!--<Button Style="{StaticResource menuButton}"
                     Text="EPIC"
                     SemanticProperties.Hint="Earth Polychromatic Imaging Camera"
-                    Command="{Binding GoEpic}" />
+                    Command="{Binding GoData}"
+                    CommandParameter="EPIC"/>-->
 
             <Button Style="{StaticResource menuButton}"
-                    Text="Mars"
+                    Text="Mars rovers"
                     SemanticProperties.Hint="Mars Rover Photos"
-                    Command="{Binding GoEpic}" />
+                    Command="{Binding GoData}" 
+                    CommandParameter="MARS"/>
 
 
         </StackLayout>
