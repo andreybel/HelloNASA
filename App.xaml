@@ -1,0 +1,44 @@
+﻿<?xml version = "1.0" encoding = "UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:HelloMauiApp"
+             x:Class="HelloMauiApp.App">
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <Color x:Key="PrimaryColor">#512bdf</Color>
+            <Color x:Key="SecondaryColor">White</Color>
+            <Color x:Key="TextColor">Black</Color>
+
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="{DynamicResource TextColor}" />
+                <Setter Property="FontFamily" Value="OpenSansRegular" />
+            </Style>
+
+            <Style TargetType="Button">
+                <Setter Property="TextColor" Value="{DynamicResource SecondaryColor}" />
+                <Setter Property="FontFamily" Value="OpenSansRegular" />
+                <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}" />
+                <Setter Property="Padding" Value="14,10" />
+            </Style>
+
+            <Style x:Key="LoadingStyle"
+                   TargetType="ActivityIndicator">
+                <Setter Property="IsRunning"
+                        Value="{Binding IsBusy}" />
+                <Setter Property="IsVisible"
+                        Value="{Binding IsBusy}" />
+                <Setter Property="Color"
+                        Value="{DynamicResource PrimaryColor}" />
+                <Setter Property="HeightRequest"
+                        Value="{OnPlatform Android='35', iOS='40'}" />
+                <Setter Property="WidthRequest"
+                        Value="{OnPlatform Android='35', iOS='40'}" />
+                <Setter Property="VerticalOptions"
+                        Value="Center" />
+                <Setter Property="HorizontalOptions" Value="Center"/>
+            </Style>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

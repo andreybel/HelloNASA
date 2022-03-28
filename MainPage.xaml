@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:HelloMauiApp.ViewModels;assembly=HelloMauiApp"
+             x:Class="HelloMauiApp.MainPage"
+             BackgroundColor="{DynamicResource SecondaryColor}"
+             NavigationPage.HasNavigationBar="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Button" x:Key="menuButton">
+                <Setter Property="TextColor" Value="{DynamicResource SecondaryColor}"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                <Setter Property="CornerRadius" Value="5"/>
+                <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="Padding" Value="15,20"/>
+                <Setter Property="Margin" Value="0,5"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ScrollView>
+        <StackLayout Padding="{OnPlatform iOS='15,60,15,15', Default='15'}">
+
+            <Image Source="dotnet_bot"
+                   Margin="0,10,0,20"/>
+
+            <Label Text="Make your choice"
+                   HorizontalTextAlignment="Center"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   Margin="0,5,0,15"/>
+
+            <Button Style="{StaticResource menuButton}"
+                    Text="APOD"
+                    SemanticProperties.Hint="Astronomy Picture Of the Day"
+                    Command="{Binding GoApod}" />
+
+            <Button Style="{StaticResource menuButton}"
+                    Text="EPIC"
+                    SemanticProperties.Hint="Earth Polychromatic Imaging Camera"
+                    Command="{Binding GoEpic}" />
+
+            <Button Style="{StaticResource menuButton}"
+                    Text="Mars"
+                    SemanticProperties.Hint="Mars Rover Photos"
+                    Command="{Binding GoEpic}" />
+
+
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

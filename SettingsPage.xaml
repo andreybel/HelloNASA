@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HelloMauiApp.SettingsPage"
+             BackgroundColor="{DynamicResource SecondaryColor}"
+             Title="{Binding Abbr, TargetNullValue='Go!'}"
+             NavigationPage.IconColor="{StaticResource SecondaryColor}">
+
+    <!--TODO inplement title view-->
+    <NavigationPage.TitleView>
+        <Grid Margin="0"
+              Padding="0"
+              ColumnDefinitions="50,*"
+              HeightRequest="50">
+            <ImageButton Grid.Column="0"
+                         Source="back_icon"
+                         Command="{Binding GoBack}"/>
+
+            <Label Grid.Column="1"
+                   Text="Go!"
+                   TextColor="{DynamicResource PrimaryColor}"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   HorizontalTextAlignment="Center"/>
+        </Grid>
+    </NavigationPage.TitleView>
+
+    <ScrollView>
+        <Grid Padding="{OnPlatform iOS='15,30,15,15', Default='15'}">
+            <StackLayout Spacing="5">
+
+                <Label 
+                    Text="{Binding Apod.date}"
+                    FontSize="12"
+                    FontAttributes="Bold"/>
+
+                <Label 
+                    Text="{Binding Apod.explanation}"
+                    FontSize="14"/>
+
+
+                <Label 
+                    Text="{Binding Apod.title}"
+                    FontSize="14"
+                    FontAttributes="Bold"/>
+
+                <Image Source="{Binding Apod.url}"/>
+
+            </StackLayout>
+
+            <ActivityIndicator Style="{StaticResource LoadingStyle}"/>
+
+        </Grid>
+        
+    </ScrollView>
+
+</ContentPage>
