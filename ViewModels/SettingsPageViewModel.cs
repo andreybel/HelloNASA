@@ -96,7 +96,7 @@ namespace HelloMauiApp.ViewModels
             try
             {
                 IsBusy = true;
-                var response = await DataService.GetMarsData(camera.ToLower());
+                var response = await DataService.GetMarsDataByCameraType(camera.ToLower());
                 if (response == null) return;
 
                 Mars = response;
@@ -124,13 +124,14 @@ namespace HelloMauiApp.ViewModels
 
                 if (parameter != null && parameter is string val)
                 {
+                    Abbr = parameter.ToString();
                     if (val.Equals("APOD"))
                     {
+                        
                         var response = await DataService.GetNasaApod();
                         if (response != null)
                         {
                             Apod = response;
-                            Abbr = parameter.ToString();
                         }
                     }
                     else if (val.Equals("EPIC"))
@@ -139,13 +140,11 @@ namespace HelloMauiApp.ViewModels
                         if (response != null)
                         {
                             Epics = new ObservableCollection<EpicDto>(response);
-                            Abbr = parameter.ToString();
                         }
                     }
                     else if (val.Equals("MARS"))
                     {
                         OnPropertyChanged(nameof(IsMars));
-                        Abbr = parameter.ToString();
 
                         CameraTypes = new ObservableCollection<string> 
                         {

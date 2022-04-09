@@ -12,6 +12,7 @@ namespace HelloMauiApp.Interfaces
         Task<ApodDto> GetNasaApod();
         Task<List<EpicDto>> GetNasaEpic();
 
-        Task<MarsDto> GetMarsData(string cameraType);
+        Task<MarsDto> GetMarsDataByCameraType(string cameraType);
+        Task<MarsDto> GetMarsDataByDate(string date);
     }
 }

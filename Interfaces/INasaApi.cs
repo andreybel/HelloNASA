@@ -17,7 +17,9 @@ namespace HelloMauiApp.Interfaces
         Task<List<EpicDto>> GetEpic();
 
         [Get("/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&camera={cameraType}&api_key=x5XFUSsKp0IdLjW16D9HPVKq2cpwpzZapI4uhwwZ")]
-        Task <MarsDto> GetMars(string cameraType);
+        Task <MarsDto> GetMarsByCamera(string cameraType);
 
+        [Get("/mars-photos/api/v1/rovers/curiosity/photos?earth_date={date}&api_key=x5XFUSsKp0IdLjW16D9HPVKq2cpwpzZapI4uhwwZ")]
+        Task<MarsDto> GetMarsByDate(string date);
     }
 }

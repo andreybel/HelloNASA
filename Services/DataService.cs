@@ -18,9 +18,16 @@ namespace HelloMauiApp.Services
 
         }
 
-        public async Task<MarsDto> GetMarsData(string cameraType)
+        public async Task<MarsDto> GetMarsDataByCameraType(string cameraType)
         {
-            var result = await _networkService.ProcessApi(x => x.GetMars(cameraType));
+            var result = await _networkService.ProcessApi(x => x.GetMarsByCamera(cameraType));
+
+            return result;
+        }
+
+        public async Task<MarsDto> GetMarsDataByDate(string date)
+        {
+            var result = await _networkService.ProcessApi(x => x.GetMarsByDate(date));
 
             return result;
         }
