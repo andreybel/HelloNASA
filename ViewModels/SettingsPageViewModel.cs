@@ -13,12 +13,14 @@ namespace HelloMauiApp.ViewModels
     public class SettingsPageViewModel : BaseViewModel
     {
         public ICommand GoSelectCamera { get; set; }
+        public ICommand GoSelectMarsSource { get; set; }
 
         #region ctor
 
         public SettingsPageViewModel(INavigation navigation) : base(navigation)
         {
             GoSelectCamera = new Command<string>((args)=> { ProcessSelectCamera(args); });
+            GoSelectMarsSource = new Command<string>((args) => { ProcessSelectMarsSource(args); });
         }
 
         #endregion
@@ -29,6 +31,20 @@ namespace HelloMauiApp.ViewModels
         public bool IsEpics => Epics!=null && Epics.Any();
         public bool IsApod => Apod != null;
         public bool IsMars => Parameter.Equals("MARS");
+
+        private bool _isMarsByCamera;
+        public bool IsMarsByCamera
+        {
+            get => _isMarsByCamera;
+            set=> SetProperty(ref _isMarsByCamera, value);
+        }
+
+        private bool _isMarsByDate;
+        public bool IsMarsByDate
+        {
+            get => _isMarsByDate;
+            set => SetProperty(ref _isMarsByDate, value);
+        }
 
         private ObservableCollection<string> _cameraTypes;
         public ObservableCollection<string> CameraTypes
@@ -78,6 +94,13 @@ namespace HelloMauiApp.ViewModels
             } 
         }
 
+        private ControlTemplate _currentTemplate;
+        public ControlTemplate CurrentTemplate
+        {
+            get => _currentTemplate;
+            set => SetProperty(ref _currentTemplate, value);
+        }
+
 
         private string _abbr;
         public string Abbr
@@ -85,6 +108,23 @@ namespace HelloMauiApp.ViewModels
             get => _abbr;
             set => SetProperty(ref _abbr, value);   
         }
+
+        private DateTime _selectedDate = DateTime.Now;
+        public DateTime SelectedDate
+        {
+            get => _selectedDate;
+            set
+            {
+                if(SetProperty(ref _selectedDate, value))
+                {
+                    _selectedDate = value;
+                    Task.Run(() => GetMarsPhotosByDate(_selectedDate.ToString("yyyy-MM-dd")));
+
+                }
+            }
+        }
+
+        public DateTime MaxDate => DateTime.Today;
         #endregion
 
         #region commands
@@ -110,6 +150,35 @@ namespace HelloMauiApp.ViewModels
             }
 
           
+        }
+
+        private void ProcessSelectMarsSource(string source)
+        {
+            if (string.IsNullOrEmpty(source)) return;
+
+            try
+            {
+                MarsPhotos?.Clear();
+                if (source.Equals("ByCamera"))
+                {
+                    IsMarsByDate = false;
+                    IsMarsByCamera = !IsMarsByDate;
+                    // CurrentTemplate = new ControlTemplate(typeof(MarsByCamera));
+                }
+                if (source.Equals("ByDate"))
+                {
+                    IsMarsByCamera = false;
+                    IsMarsByDate = !IsMarsByCamera;
+                    //CurrentTemplate = new ControlTemplate(typeof(MarsByDate));
+                }
+
+                OnPropertyChanged(nameof(MarsPhotos));
+                OnPropertyChanged(nameof(CurrentTemplate));
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         #endregion
@@ -145,11 +214,15 @@ namespace HelloMauiApp.ViewModels
                     else if (val.Equals("MARS"))
                     {
                         OnPropertyChanged(nameof(IsMars));
+                        // set as default
+                        IsMarsByCamera = true;
 
                         CameraTypes = new ObservableCollection<string> 
                         {
                             "FHAZ","RHAZ","MAST","CHEMCAM","MAHLI","MARDI", "NAVCAM"//, "PANCAM","MINITES"
                         };
+                        // get camre template as default
+                        //CurrentTemplate = new ControlTemplate(typeof(MarsByCamera));
 
                         OnPropertyChanged(nameof(CameraTypes));
                     }
@@ -170,35 +243,31 @@ namespace HelloMauiApp.ViewModels
 
         #region privates
 
-        private async Task LoadData()
+        private async Task GetMarsPhotosByDate(string date)
         {
             try
             {
                 IsBusy = true;
-                var response = await DataService.GetNasaApod();
-                if (response != null)
-                {
-                    Apod = response;
-                    Abbr = "APOD";
-                }
+                var photos = new List<MarsPhoto>();
+                var mars = await DataService.GetMarsDataByDate(date);
+                if (mars != null && mars.photos?.Count > 20)
+                    photos = mars.photos.Take(20).ToList();
+                else
+                    photos = mars.photos.ToList();
+
+                MarsPhotos = new ObservableCollection<MarsPhoto>(photos);
+                OnPropertyChanged(nameof(Mars));
+                OnPropertyChanged(nameof(MarsPhotos));
+            }
+            catch (Exception ex)
+            {
+
             }
             finally
             {
                 IsBusy = false;
             }
-           
         }
-
-       private EpicDto MapEpicData(EpicDto epic)
-       {
-            var output = new EpicDto();
-
-            if (epic == null) return output;
-
-            epic.ImageUrl = $"{epic.image}";
-
-            return output;
-       }
 
         #endregion
     }

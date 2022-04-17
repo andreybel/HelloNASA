@@ -7,9 +7,13 @@
         <ResourceDictionary>
 
             <Color x:Key="PrimaryColor">#512bdf</Color>
+            <Color x:Key="PrimaryBorderColor">#B1B597</Color>
             <Color x:Key="SecondaryColor">White</Color>
             <Color x:Key="TextColor">Black</Color>
 
+            <x:String x:Key="astronautGray">astronaut_gray</x:String>
+            <x:String x:Key="astronautBlue">astronaut_blue</x:String>
+            
             <Style TargetType="Label">
                 <Setter Property="TextColor" Value="{DynamicResource TextColor}" />
                 <Setter Property="FontFamily" Value="OpenSansRegular" />

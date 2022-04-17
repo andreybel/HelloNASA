@@ -23,8 +23,11 @@
     <ScrollView>
         <StackLayout Padding="{OnPlatform iOS='15,60,15,15', Default='15'}">
 
-            <Image Source="dotnet_bot"
-                   Margin="0,10,0,20"/>
+            <Image Source="{StaticResource astronautGray}"
+                   Margin="0,10,0,20"
+                   HeightRequest="100"
+                   WidthRequest="100"
+                   HorizontalOptions="Center"/>
 
             <Label Text="Make your choice"
                    HorizontalTextAlignment="Center"
