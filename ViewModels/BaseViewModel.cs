@@ -17,12 +17,21 @@ namespace HelloMauiApp.ViewModels
         public INavigation Navigation { get; set; }
         public ICommand GoBack { get; set; }
         
-
+        public BaseViewModel()
+        {
+           
+        }
         public BaseViewModel(INavigation navigation)
         {
             Navigation = navigation;
 
             GoBack = new Command(() => Navigation.PopAsync());
+
+            MessagingCenter.Subscribe<Services.NetworkService, bool>(this, "connection", (sender, args) =>
+            {
+                _isConnected = args;
+                OnPropertyChanged(nameof(IsConnected));
+            });
 
             Initialize();
         }
@@ -39,6 +48,13 @@ namespace HelloMauiApp.ViewModels
             set =>SetProperty(ref _isBusy, value);
         }
 
+
+        private bool _isConnected = true;
+        public bool IsConnected
+        {
+            get => _isConnected;
+            set => SetProperty(ref _isConnected, value);
+        }
         #endregion
 
         #region privates

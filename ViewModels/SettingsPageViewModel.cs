@@ -19,7 +19,7 @@ namespace HelloMauiApp.ViewModels
 
         public SettingsPageViewModel(INavigation navigation) : base(navigation)
         {
-            GoSelectCamera = new Command<string>((args)=> { ProcessSelectCamera(args); });
+            GoSelectCamera = new Command<CameraTypeVm>((args)=> { ProcessSelectCamera(args); });
             GoSelectMarsSource = new Command<string>((args) => { ProcessSelectMarsSource(args); });
         }
 
@@ -46,14 +46,14 @@ namespace HelloMauiApp.ViewModels
             set => SetProperty(ref _isMarsByDate, value);
         }
 
-        private ObservableCollection<string> _cameraTypes;
-        public ObservableCollection<string> CameraTypes
+        private ObservableCollection<CameraTypeVm> _cameraTypes;
+        public ObservableCollection<CameraTypeVm> CameraTypes
         {
             get=> _cameraTypes;
             set=>SetProperty(ref _cameraTypes, value);
         }
 
-        private ObservableCollection<MarsPhoto> _marsPhotos;
+        private ObservableCollection<MarsPhoto> _marsPhotos = new ObservableCollection<MarsPhoto>();
         public ObservableCollection<MarsPhoto> MarsPhotos
         {
             get => _marsPhotos;
@@ -129,14 +129,26 @@ namespace HelloMauiApp.ViewModels
 
         #region commands
 
-        private async Task ProcessSelectCamera(string camera)
+        private async Task ProcessSelectCamera(CameraTypeVm camera)
         {
-            if (string.IsNullOrEmpty(camera)) return;
+            if (camera == null) return;
 
             try
             {
                 IsBusy = true;
-                var response = await DataService.GetMarsDataByCameraType(camera.ToLower());
+                foreach (var item in CameraTypes)
+                {
+                    if (!item.Equals(camera))
+                    {
+                        item.IsSelected = false;
+                        continue;
+                    };
+
+                    item.IsSelected = true;
+
+                    OnPropertyChanged(nameof(item));
+                }
+                var response = await DataService.GetMarsDataByCameraType(camera.Type.ToLower());
                 if (response == null) return;
 
                 Mars = response;
@@ -152,7 +164,7 @@ namespace HelloMauiApp.ViewModels
           
         }
 
-        private void ProcessSelectMarsSource(string source)
+        private async Task ProcessSelectMarsSource(string source)
         {
             if (string.IsNullOrEmpty(source)) return;
 
@@ -163,6 +175,7 @@ namespace HelloMauiApp.ViewModels
                 {
                     IsMarsByDate = false;
                     IsMarsByCamera = !IsMarsByDate;
+                    await ProcessSelectCamera(CameraTypes?.FirstOrDefault());
                     // CurrentTemplate = new ControlTemplate(typeof(MarsByCamera));
                 }
                 if (source.Equals("ByDate"))
@@ -216,12 +229,11 @@ namespace HelloMauiApp.ViewModels
                         OnPropertyChanged(nameof(IsMars));
                         // set as default
                         IsMarsByCamera = true;
+                        MarsPhotos?.Clear();
+                        CameraTypes = new ObservableCollection<CameraTypeVm>(GenerateTypesList());
+                        await ProcessSelectCamera(CameraTypes?.FirstOrDefault());
 
-                        CameraTypes = new ObservableCollection<string> 
-                        {
-                            "FHAZ","RHAZ","MAST","CHEMCAM","MAHLI","MARDI", "NAVCAM"//, "PANCAM","MINITES"
-                        };
-                        // get camre template as default
+                        // get camera template as default
                         //CurrentTemplate = new ControlTemplate(typeof(MarsByCamera));
 
                         OnPropertyChanged(nameof(CameraTypes));
@@ -267,6 +279,41 @@ namespace HelloMauiApp.ViewModels
             {
                 IsBusy = false;
             }
+        }
+
+        private List<CameraTypeVm> GenerateTypesList()
+        {
+            return new List<CameraTypeVm>()
+            {
+                new CameraTypeVm
+                {
+                    Type = "FHAZ"
+                },
+                new CameraTypeVm
+                {
+                    Type = "RHAZ"
+                },
+                new CameraTypeVm
+                {
+                    Type = "MAST"
+                },
+                new CameraTypeVm
+                {
+                    Type = "CHEMCAM"
+                },
+                new CameraTypeVm
+                {
+                    Type = "MAHLI"
+                },
+                new CameraTypeVm
+                {
+                    Type = "MARDI"
+                },
+                new CameraTypeVm
+                {
+                    Type = "NAVCAM"
+                }
+            };
         }
 
         #endregion

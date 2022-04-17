@@ -15,6 +15,12 @@ namespace HelloMauiApp.Services
         public NetworkService()
         {
             SetupApi();
+
+            Connectivity.ConnectivityChanged += (sender, args) =>
+            {
+                var isConnected = args.NetworkAccess == NetworkAccess.Internet;
+                MessagingCenter.Send(this, "connection", isConnected);
+            };
         }
 
         public bool IsConnected => Connectivity.NetworkAccess == NetworkAccess.Internet;

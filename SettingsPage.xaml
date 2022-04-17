@@ -27,15 +27,17 @@
                 <Setter Property="FontSize" Value="18"/>
                 <Setter Property="Padding" Value="0,10"/>
                 <Setter Property="Margin" Value="0"/>
-                <Setter Property="BorderWidth" Value="3"/>
+                <Setter Property="BorderWidth" Value="2"/>
             </Style>
             
             <Style TargetType="Button" x:Key="menuButton">
                 <Setter Property="TextColor" Value="{DynamicResource SecondaryColor}"/>
                 <Setter Property="WidthRequest" Value="60"/>
                 <Setter Property="CornerRadius" Value="5"/>
-                <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}"/>
+                <Setter Property="BorderColor" Value="{DynamicResource PrimaryColor}"/>
+                <Setter Property="BorderWidth" Value="1"/>
                 <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
                 <Setter Property="Padding" Value="0,10"/>
                 <Setter Property="Margin" Value="0,5"/>
             </Style>
@@ -66,8 +68,8 @@
             <DataTemplate x:Key="cameraTypeTemplate">
                 <Button Style="{StaticResource menuButton}" 
                         WidthRequest="100"
-                        HorizontalOptions="FillAndExpand"
-                        Text="{Binding }"
+                        Text="{Binding Type}"
+                        BackgroundColor="{Binding IsSelected, Converter={StaticResource SelectedButtonConverter}}"
                         Command="{Binding BindingContext.GoSelectCamera, Source={x:Reference cameras}}"
                         CommandParameter="{Binding .}"/>
             </DataTemplate>
@@ -195,7 +197,14 @@
                         <LinearItemsLayout Orientation="Vertical"
                            ItemSpacing="10" />
                     </CollectionView.ItemsLayout>
-
+                    <CollectionView.EmptyView>
+                        <Image
+                            Source="{DynamicResource astronautGray}"
+                            Opacity=".3"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            Aspect="AspectFit"/>
+                    </CollectionView.EmptyView>
                 </CollectionView>
             </Grid>
             
@@ -220,7 +229,14 @@
                         <LinearItemsLayout Orientation="Vertical"
                            ItemSpacing="10" />
                     </CollectionView.ItemsLayout>
-
+                    <CollectionView.EmptyView>
+                        <Image
+                            Source="{DynamicResource astronautBlue}"
+                            Opacity=".3"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            Aspect="AspectFit"/>
+                    </CollectionView.EmptyView>
                 </CollectionView>
 
             </Grid>
