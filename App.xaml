@@ -2,12 +2,14 @@
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:HelloMauiApp.Converters;assembly=HelloMauiApp"
+             xmlns:controls="clr-namespace:HelloMauiApp;assembly=HelloMauiApp"
              xmlns:local="clr-namespace:HelloMauiApp"
              x:Class="HelloMauiApp.App">
     <Application.Resources>
         <ResourceDictionary>
 
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <converters:BoolToIconConverter x:Key="BoolToIconConverter"/>
 
             <Color x:Key="PrimaryColor">#512bdf</Color>
             <Color x:Key="PrimaryBorderColor">#B1B597</Color>
@@ -44,6 +46,11 @@
                 <Setter Property="VerticalOptions"
                         Value="Center" />
                 <Setter Property="HorizontalOptions" Value="Center"/>
+            </Style>
+
+            <Style TargetType="controls:NoConnectionPlug" x:Key="NoInternetContainer">
+                <Setter Property="IsVisible" Value="{Binding IsConnected, Converter={StaticResource InverseBooleanConverter}}"/>
+                <Setter Property="ImageSource" Value="{Binding IsConnected, Converter={StaticResource BoolToIconConverter}}"/>
             </Style>
 
         </ResourceDictionary>

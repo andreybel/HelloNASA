@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:cells="clr-namespace:HelloMauiApp;assembly=HelloMauiApp"
              xmlns:converters="clr-namespace:HelloMauiApp.Converters;assembly=HelloMauiApp"
+             xmlns:controls="clr-namespace:HelloMauiApp;assembly=HelloMauiApp"
              xmlns:helpers="clr-namespace:HelloMauiApp.Helpers;assembly=HelloMauiApp"
              x:Class="HelloMauiApp.SettingsPage"
              BackgroundColor="{DynamicResource SecondaryColor}"
@@ -97,160 +98,171 @@
     </NavigationPage.TitleView>
 
     <Grid Margin="0"
+          Padding="0">
+        <Grid Margin="0"
           Padding="0"
-          RowDefinitions="50,*">
-        
-        <!--temporary header-->
-        <Grid Grid.Row="0"
+          RowDefinitions="50,*"
+          IsVisible="{Binding IsConnected}">
+
+            <!--temporary header-->
+            <Grid Grid.Row="0"
               ColumnDefinitions="50,*,50">
-            <ImageButton Grid.Column="0"
+                <ImageButton Grid.Column="0"
                          Source="back_icon"
                          Command="{Binding GoBack}"
                          Margin="10"/>
 
-            <Label Grid.Column="1"
+                <Label Grid.Column="1"
                    Text="{Binding Abbr}"
                    TextColor="{DynamicResource PrimaryColor}"
                    FontSize="18"
                    FontAttributes="Bold"
                    HorizontalTextAlignment="Center"
                    VerticalTextAlignment="Center"/>
-        </Grid>
-        
-        <!-- APOD container-->
-        <ScrollView 
+            </Grid>
+
+            <!-- APOD container-->
+            <ScrollView 
             Grid.Row="1"
             IsVisible="{Binding IsApod}">
 
-            <StackLayout Spacing="5"
+                <StackLayout Spacing="5"
                              Padding="{OnPlatform iOS='15,30,15,15', Default='15'}">
-                <Label 
+                    <Label 
                     Text="{Binding Apod.date}"
                     FontSize="12"
                     FontAttributes="Bold"/>
 
-                <Label 
+                    <Label 
                     Text="{Binding Apod.explanation}"
                     FontSize="14"/>
 
 
-                <Label 
+                    <Label 
                     Text="{Binding Apod.title}"
                     FontSize="14"
                     FontAttributes="Bold"/>
 
-                <Image Source="{Binding Apod.url}"/>
+                    <Image Source="{Binding Apod.url}"/>
 
-            </StackLayout>
-        </ScrollView>
+                </StackLayout>
+            </ScrollView>
 
-        
-        <!--MARS container-->
-        <Grid 
+
+            <!--MARS container-->
+            <Grid 
             Grid.Row="1"
             IsVisible="{Binding IsMars}"
                      Margin="{OnPlatform iOS='15,30,15,15', Default='15'}"
                      RowDefinitions="50, *">
 
-            <Grid  
+                <Grid  
                 Grid.Row="0"
                 ColumnDefinitions="*,*"
                 ColumnSpacing="5">
-                <Button Grid.Column="0"
+                    <Button Grid.Column="0"
                         Style="{StaticResource menuPrimaryButton}"
                         Text="By Camera"
                         BackgroundColor="{Binding IsMarsByCamera, Converter={StaticResource SelectedButtonConverter}}"
                         Command="{Binding GoSelectMarsSource}"
                         CommandParameter="ByCamera"/>
 
-                <Button Grid.Column="1"
+                    <Button Grid.Column="1"
                         Style="{StaticResource menuPrimaryButton}"
                         Text="By Date"
                         BackgroundColor="{Binding IsMarsByDate, Converter={StaticResource SelectedButtonConverter}}"
                         Command="{Binding GoSelectMarsSource}"
                         CommandParameter="ByDate"/>
-            </Grid>
+                </Grid>
 
-            <!--Photos by camera-->
-            <Grid Grid.Row="1" 
+                <!--Photos by camera-->
+                <Grid Grid.Row="1" 
                   RowDefinitions="Auto,50,*"
                   IsVisible="{Binding IsMarsByCamera}">
-                <Label Grid.Row="0"
+                    <Label Grid.Row="0"
                    Text="Select camera:"
                    FontAttributes="Bold"
                    FontSize="14"
                    Padding="0,5"/>
-                <CollectionView Grid.Row="1" 
+                    <CollectionView Grid.Row="1" 
                             ItemsSource="{Binding CameraTypes}"
                                 ItemTemplate="{StaticResource cameraTypeTemplate}"
                             x:Name="cameras">
-                    <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Horizontal"
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Horizontal"
                                            ItemSpacing="3"/>
-                    </CollectionView.ItemsLayout>
-                </CollectionView>
-                <CollectionView Grid.Row="2"
+                        </CollectionView.ItemsLayout>
+                    </CollectionView>
+                    <CollectionView Grid.Row="2"
                             Margin="0,10"
                         ItemsSource="{Binding MarsPhotos}"
                         ItemTemplate="{StaticResource marsImagesTemplate}">
-                    <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Vertical"
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical"
                            ItemSpacing="10" />
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.EmptyView>
-                        <Image
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.EmptyView>
+                            <Image
                             Source="{DynamicResource astronautGray}"
                             Opacity=".3"
                             VerticalOptions="Center"
                             HorizontalOptions="Center"
                             Aspect="AspectFit"/>
-                    </CollectionView.EmptyView>
-                </CollectionView>
-            </Grid>
-            
-            <!--Photos by date-->
-            <Grid Grid.Row="1"
+                        </CollectionView.EmptyView>
+                    </CollectionView>
+                </Grid>
+
+                <!--Photos by date-->
+                <Grid Grid.Row="1"
                   IsVisible="{Binding IsMarsByDate}"
                   RowDefinitions="Auto,Auto,*">
-                <Label Grid.Row="0"
+                    <Label Grid.Row="0"
                    Text="Select date:"
                    FontAttributes="Bold"
                    FontSize="14"
                    Padding="0,5"/>
-                <DatePicker Grid.Row="1"
+                    <DatePicker Grid.Row="1"
                             MinimumDate="01/01/2015"
                             MaximumDate="{Binding MaxDate}"
                             Date="{Binding SelectedDate, Mode=TwoWay}"/>
 
-                <CollectionView Grid.Row="2" Margin="0,10"
+                    <CollectionView Grid.Row="2" Margin="0,10"
                         ItemsSource="{Binding MarsPhotos}"
                         ItemTemplate="{StaticResource marsImagesTemplate}">
-                    <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Vertical"
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical"
                            ItemSpacing="10" />
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.EmptyView>
-                        <Image
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.EmptyView>
+                            <Image
                             Source="{DynamicResource astronautBlue}"
                             Opacity=".3"
                             VerticalOptions="Center"
                             HorizontalOptions="Center"
                             Aspect="AspectFit"/>
-                    </CollectionView.EmptyView>
-                </CollectionView>
+                        </CollectionView.EmptyView>
+                    </CollectionView>
 
-            </Grid>
+                </Grid>
 
-            <!--<ContentView Grid.Row="1"
+                <!--<ContentView Grid.Row="1"
                          ControlTemplate="{Binding CurrentTemplate}"
                          BindingContext="{x:Reference this}"/>-->
 
-        </Grid>
-        
+            </Grid>
 
-        <ActivityIndicator 
+
+            <ActivityIndicator 
             Grid.Row="1"
             Style="{StaticResource LoadingStyle}"/>
+
+        </Grid>
+
+        <!--no connection plug-->
+        <controls:NoConnectionPlug Style="{DynamicResource NoInternetContainer}"/>
+        
     </Grid>
+    
+    
 
 </ContentPage>
