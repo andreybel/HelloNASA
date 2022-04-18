@@ -23,5 +23,10 @@ namespace HelloMauiApp.Models
             var type = obj as CameraTypeVm;
             return this.Type.Equals(type.Type);
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

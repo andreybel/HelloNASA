@@ -1,10 +1,29 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:HelloMauiApp.Converters;assembly=HelloMauiApp"
+             xmlns:helpers="clr-namespace:HelloMauiApp.Helpers;assembly=HelloMauiApp"
              x:Class="HelloMauiApp.MarsByCamera"
              x:Name="cameraView">
     <ContentView.Resources>
         <ResourceDictionary>
+            <converters:BoolToColorConverter x:Key="SelectedButtonConverter"
+                                             TrueColor="{x:Static helpers:ColorsHelper.PrimaryColor}"
+                                             FalseColor="{x:Static helpers:ColorsHelper.BackgroundGrayColor}"
+                                             NullColor="White"/>
+
+            <Style TargetType="Button" x:Key="menuButton">
+                <Setter Property="TextColor" Value="{DynamicResource SecondaryColor}"/>
+                <Setter Property="WidthRequest" Value="60"/>
+                <Setter Property="CornerRadius" Value="5"/>
+                <Setter Property="BorderColor" Value="{DynamicResource PrimaryColor}"/>
+                <Setter Property="BorderWidth" Value="1"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                <Setter Property="Padding" Value="0,10"/>
+                <Setter Property="Margin" Value="0,5"/>
+            </Style>
+
             <DataTemplate x:Key="marsImagesTemplate">
                 <Grid RowDefinitions="20,*">
                     <Label Grid.Row="0"
@@ -20,36 +39,27 @@
             <DataTemplate x:Key="cameraTypeTemplate">
                 <Button Style="{StaticResource menuButton}" 
                         WidthRequest="100"
-                        HorizontalOptions="FillAndExpand"
-                        Text="{Binding }"
+                        Text="{Binding Type}"
+                        BackgroundColor="{Binding IsSelected, Converter={StaticResource SelectedButtonConverter}}"
                         Command="{Binding BindingContext.GoSelectCamera, Source={x:Reference cameras}}"
                         CommandParameter="{Binding .}"/>
             </DataTemplate>
         </ResourceDictionary>
     </ContentView.Resources>
-    <Grid RowDefinitions="Auto,70,*">
+    <Grid RowDefinitions="Auto,50,*">
         <Label Grid.Row="0"
                    Text="Select camera:"
                    FontAttributes="Bold"
                    FontSize="14"
                    Padding="0,5"/>
         <CollectionView Grid.Row="1" 
-                            ItemsSource="{Binding BindingContext.CameraTypes, Source={x:Reference cameraView}}"
-                            x:Name="cameras">
+                        ItemsSource="{Binding BindingContext.CameraTypes, Source={x:Reference cameraView}}"
+                        ItemTemplate="{StaticResource cameraTypeTemplate}"
+                        x:Name="cameras">
             <CollectionView.ItemsLayout>
                 <LinearItemsLayout Orientation="Horizontal"
                                            ItemSpacing="3"/>
             </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Button Style="{StaticResource menuButton}" 
-                        WidthRequest="100"
-                        HorizontalOptions="FillAndExpand"
-                        Text="{Binding }"
-                        Command="{Binding BindingContext.GoSelectCamera, Source={x:Reference cameras}}"
-                        CommandParameter="{Binding .}"/>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
         </CollectionView>
         <CollectionView Grid.Row="2"
                             Margin="0,10"
@@ -59,7 +69,14 @@
                 <LinearItemsLayout Orientation="Vertical"
                            ItemSpacing="10" />
             </CollectionView.ItemsLayout>
-
+            <CollectionView.EmptyView>
+                <Image
+                            Source="{DynamicResource astronautGray}"
+                            Opacity=".3"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            Aspect="AspectFit"/>
+            </CollectionView.EmptyView>
         </CollectionView>
     </Grid>
 </ContentView>

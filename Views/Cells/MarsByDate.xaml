@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HelloMauiApp.MarsByDate"
+             x:Name="dateView">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="marsImagesTemplate">
+                <Grid RowDefinitions="20,*">
+                    <Label Grid.Row="0"
+                           Text="{Binding earth_date}"/>
+                    <Image Grid.Row="1" 
+                           Source="{Binding img_src}"
+                           VerticalOptions="FillAndExpand"
+                           HorizontalOptions="FillAndExpand"
+                           Aspect="AspectFill"/>
+                </Grid>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <Grid RowDefinitions="Auto,Auto,*">
+        <Label Grid.Row="0"
+                   Text="Select date:"
+                   FontAttributes="Bold"
+                   FontSize="14"
+                   Padding="0,5"/>
+        <DatePicker Grid.Row="1"
+                            MinimumDate="01/01/2015"
+                            MaximumDate="{Binding MaxDate}"
+                            Date="{Binding SelectedDate, Mode=TwoWay}"/>
+
+        <CollectionView Grid.Row="2"
+                            Margin="0,10"
+                        ItemsSource="{Binding BindingContext.MarsPhotos, Source={x:Reference dateView}}"
+                        ItemTemplate="{StaticResource marsImagesTemplate}">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical"
+                           ItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.EmptyView>
+                <Image
+                            Source="{DynamicResource astronautBlue}"
+                            Opacity=".3"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            Aspect="AspectFit"/>
+            </CollectionView.EmptyView>
+        </CollectionView>
+    </Grid>
+</ContentView>

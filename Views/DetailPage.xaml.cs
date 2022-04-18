@@ -1,17 +1,17 @@
-﻿
 using HelloMauiApp.ViewModels;
 
 namespace HelloMauiApp;
 
-public partial class SettingsPage : ContentPage
+public partial class DetailPage : ContentPage
 {
-    public SettingsPage(object parameter = null)
-    {
+	public DetailPage(object parameter = null)
+	{
+
         InitializeComponent();
 
-        this.BindingContext = new SettingsPageViewModel(Navigation);
+        this.BindingContext = new DetailPageViewModel(Navigation);
 
-        var viewModel = BindingContext as SettingsPageViewModel;
+        var viewModel = BindingContext as DetailPageViewModel;
 
         if (!string.IsNullOrEmpty(parameter.ToString()))
         {

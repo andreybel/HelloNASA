@@ -47,7 +47,7 @@ namespace HelloMauiApp.ViewModels
         {
             if (string.IsNullOrEmpty(parameter)) return;
                 
-            await Navigation.PushAsync(new SettingsPage(parameter));
+            await Navigation.PushAsync(new DetailPage(parameter));
            
         }
 

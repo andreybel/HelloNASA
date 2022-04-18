@@ -10,14 +10,14 @@ using System.Windows.Input;
 
 namespace HelloMauiApp.ViewModels
 {
-    public class SettingsPageViewModel : BaseViewModel
+    public class DetailPageViewModel : BaseViewModel
     {
         public ICommand GoSelectCamera { get; set; }
         public ICommand GoSelectMarsSource { get; set; }
 
         #region ctor
 
-        public SettingsPageViewModel(INavigation navigation) : base(navigation)
+        public DetailPageViewModel(INavigation navigation) : base(navigation)
         {
             GoSelectCamera = new Command<CameraTypeVm>((args)=> { ProcessSelectCamera(args); });
             GoSelectMarsSource = new Command<string>((args) => { ProcessSelectMarsSource(args); });
@@ -176,17 +176,20 @@ namespace HelloMauiApp.ViewModels
                     IsMarsByDate = false;
                     IsMarsByCamera = !IsMarsByDate;
                     await ProcessSelectCamera(CameraTypes?.FirstOrDefault());
-                    // CurrentTemplate = new ControlTemplate(typeof(MarsByCamera));
+                    //CurrentTemplate = new ControlTemplate(typeof(MarsByCamera));
                 }
                 if (source.Equals("ByDate"))
                 {
                     IsMarsByCamera = false;
                     IsMarsByDate = !IsMarsByCamera;
+
+                    await GetMarsPhotosByDate(SelectedDate.ToString("yyyy-MM-dd"));
+
                     //CurrentTemplate = new ControlTemplate(typeof(MarsByDate));
                 }
 
                 OnPropertyChanged(nameof(MarsPhotos));
-                OnPropertyChanged(nameof(CurrentTemplate));
+                //OnPropertyChanged(nameof(CurrentTemplate));
             }
             catch (Exception)
             {
