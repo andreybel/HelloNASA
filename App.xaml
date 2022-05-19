@@ -18,6 +18,7 @@
 
             <x:String x:Key="astronautGray">astronaut_gray</x:String>
             <x:String x:Key="astronautBlue">astronaut_blue</x:String>
+            <x:String x:Key="dotnetBot">dotnet_bot</x:String>
             
             <Style TargetType="Label">
                 <Setter Property="TextColor" Value="{DynamicResource TextColor}" />

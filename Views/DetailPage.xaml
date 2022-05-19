@@ -76,27 +76,27 @@
 
             <!-- APOD container-->
             <ScrollView 
-            Grid.Row="1"
-            IsVisible="{Binding IsApod}">
+                Grid.Row="1"
+                IsVisible="{Binding IsApod}">
 
                 <StackLayout Spacing="5"
-                             Padding="{OnPlatform iOS='15,30,15,15', Default='15'}">
-                    <Label 
-                    Text="{Binding Apod.date}"
-                    FontSize="12"
-                    FontAttributes="Bold"/>
+                                 Padding="{OnPlatform iOS='15,30,15,15', Default='15'}">
+                    <!--<Label 
+                            Text="{Binding Apod.date}"
+                            FontSize="12"
+                            FontAttributes="Bold"/>-->
 
                     <Label 
-                    Text="{Binding Apod.explanation}"
-                    FontSize="14"/>
+                            Text="{Binding Apod.Explanation}"
+                            FontSize="14"/>
 
 
                     <Label 
-                    Text="{Binding Apod.title}"
-                    FontSize="14"
-                    FontAttributes="Bold"/>
+                            Text="{Binding Apod.Title}"
+                            FontSize="14"
+                            FontAttributes="Bold"/>
 
-                    <Image Source="{Binding Apod.url}"/>
+                    <Image Source="{Binding Apod.Url}"/>
 
                 </StackLayout>
             </ScrollView>

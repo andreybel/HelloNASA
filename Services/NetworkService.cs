@@ -27,7 +27,7 @@ namespace HelloMauiApp.Services
 
         private void SetupApi()
         {
-            var client = new HttpClient() { BaseAddress = new Uri(AppSettings.Constants.BaseApi) };
+            var client = new HttpClient(new Xamarin.Android.Net.AndroidMessageHandler()) { BaseAddress = new Uri(AppSettings.Constants.BaseApi) };
             _nasaApi = RestService.For<INasaApi>(client);
         }
 

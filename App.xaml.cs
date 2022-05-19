@@ -1,15 +1,14 @@
-﻿using HelloMauiApp.Interfaces;
+﻿using HelloMauiApp.Helpers;
+using HelloMauiApp.Interfaces;
 
 namespace HelloMauiApp;
 
 public partial class App : Application
 {
-    public static IServiceProvider serviceProvider { get; set; }
-    public App(IServiceProvider sp)
+    public App()
 	{
 		InitializeComponent();
 
-        serviceProvider = sp;
 		MainPage = new NavigationPage(new MainPage());
 	}
 
@@ -26,8 +25,13 @@ public partial class App : Application
 
     protected override void OnStart()
     {
-        var network = serviceProvider.GetService<INetworkService>();
+        ServiceHelper.GetService<INetworkService>();
         base.OnStart();
     }
 
+    protected override void OnResume()
+    {
+        ServiceHelper.GetService<INetworkService>();
+        base.OnResume();
+    }
 }

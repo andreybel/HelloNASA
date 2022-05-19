@@ -1,3 +1,4 @@
+using HelloMauiApp.Helpers;
 using HelloMauiApp.ViewModels;
 
 namespace HelloMauiApp;
@@ -9,14 +10,14 @@ public partial class DetailPage : ContentPage
 
         InitializeComponent();
 
-        this.BindingContext = new DetailPageViewModel(Navigation);
+        BindingContext = ServiceHelper.GetService<DetailPageViewModel>(); ;
 
         var viewModel = BindingContext as DetailPageViewModel;
 
         if (!string.IsNullOrEmpty(parameter.ToString()))
         {
             viewModel.Parameter = parameter.ToString();
-            Task.Run(async () => await viewModel.Initialize(parameter));
+            viewModel.Initialize(parameter);
         }
     }
 }

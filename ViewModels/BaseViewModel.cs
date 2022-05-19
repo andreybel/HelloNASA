@@ -1,4 +1,5 @@
-﻿using HelloMauiApp.Interfaces;
+﻿using HelloMauiApp.Helpers;
+using HelloMauiApp.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,17 +16,19 @@ namespace HelloMauiApp.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         
         public INavigation Navigation { get; set; }
+        public IDataService DataService { get; set; }
         public ICommand GoBack { get; set; }
         
         public BaseViewModel()
         {
-           
-        }
-        public BaseViewModel(INavigation navigation)
-        {
-            Navigation = navigation;
 
-            GoBack = new Command(() => Navigation.PopAsync());
+        }
+       
+        public BaseViewModel(IDataService dataService)
+        {
+            DataService = dataService;
+
+            GoBack = new Command(() => Application.Current.MainPage.Navigation.PopAsync());
 
             MessagingCenter.Subscribe<Services.NetworkService, bool>(this, "connection", (sender, args) =>
             {
@@ -37,9 +40,6 @@ namespace HelloMauiApp.ViewModels
         }
 
         #region properties
-
-        private readonly IDataService _dataService;
-        public IDataService DataService => _dataService ?? App.serviceProvider.GetService<IDataService>();
 
         private bool _isBusy;
         public bool IsBusy

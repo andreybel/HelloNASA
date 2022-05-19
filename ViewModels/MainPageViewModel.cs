@@ -21,7 +21,7 @@ namespace HelloMauiApp.ViewModels
 
 
         #region ctor
-        public MainPageViewModel(INavigation navigation) : base(navigation)
+        public MainPageViewModel(IDataService dataService) : base(dataService)
         {
 
             GoData = new Command<string>(execute: (arg) => { ProcessData(arg); });
@@ -35,7 +35,7 @@ namespace HelloMauiApp.ViewModels
         {
             get => _counter;
             set => SetProperty(ref _counter, value);
-        } 
+        }
 
         #endregion
 
@@ -47,7 +47,7 @@ namespace HelloMauiApp.ViewModels
         {
             if (string.IsNullOrEmpty(parameter)) return;
                 
-            await Navigation.PushAsync(new DetailPage(parameter));
+            await Application.Current.MainPage.Navigation.PushAsync(new DetailPage(parameter));
            
         }
 

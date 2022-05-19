@@ -1,4 +1,5 @@
-﻿using HelloMauiApp.ViewModels;
+﻿using HelloMauiApp.Helpers;
+using HelloMauiApp.ViewModels;
 
 namespace HelloMauiApp;
 public partial class MainPage : ContentPage
@@ -7,7 +8,7 @@ public partial class MainPage : ContentPage
 	{
 		InitializeComponent();
 
-		this.BindingContext = new MainPageViewModel(Navigation);
+		BindingContext = ServiceHelper.GetService<MainPageViewModel>();
 	}
 
 }

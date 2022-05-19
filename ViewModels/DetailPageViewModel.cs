@@ -15,10 +15,12 @@ namespace HelloMauiApp.ViewModels
         public ICommand GoSelectCamera { get; set; }
         public ICommand GoSelectMarsSource { get; set; }
 
+
         #region ctor
 
-        public DetailPageViewModel(INavigation navigation) : base(navigation)
+        public DetailPageViewModel(IDataService dataService) : base(dataService)
         {
+
             GoSelectCamera = new Command<CameraTypeVm>((args)=> { ProcessSelectCamera(args); });
             GoSelectMarsSource = new Command<string>((args) => { ProcessSelectMarsSource(args); });
         }
@@ -156,6 +158,10 @@ namespace HelloMauiApp.ViewModels
                 OnPropertyChanged(nameof(Mars));
                 OnPropertyChanged(nameof(MarsPhotos));
             }
+            catch (Exception)
+            {
+
+            }
             finally
             {
                 IsBusy = false;
@@ -176,7 +182,6 @@ namespace HelloMauiApp.ViewModels
                     IsMarsByDate = false;
                     IsMarsByCamera = !IsMarsByDate;
                     await ProcessSelectCamera(CameraTypes?.FirstOrDefault());
-                    //CurrentTemplate = new ControlTemplate(typeof(MarsByCamera));
                 }
                 if (source.Equals("ByDate"))
                 {
@@ -185,11 +190,9 @@ namespace HelloMauiApp.ViewModels
 
                     await GetMarsPhotosByDate(SelectedDate.ToString("yyyy-MM-dd"));
 
-                    //CurrentTemplate = new ControlTemplate(typeof(MarsByDate));
                 }
 
                 OnPropertyChanged(nameof(MarsPhotos));
-                //OnPropertyChanged(nameof(CurrentTemplate));
             }
             catch (Exception)
             {
@@ -212,12 +215,19 @@ namespace HelloMauiApp.ViewModels
                     Abbr = parameter.ToString();
                     if (val.Equals("APOD"))
                     {
-                        
                         var response = await DataService.GetNasaApod();
                         if (response != null)
                         {
                             Apod = response;
                         }
+
+                        // test data
+                        //Apod = new ApodDto
+                        //{
+                        //    Explanation = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                        //    Title = "Title",
+                        //    Url = "astronaut_blue.png"
+                        //};
                     }
                     else if (val.Equals("EPIC"))
                     {
@@ -241,14 +251,22 @@ namespace HelloMauiApp.ViewModels
 
                         OnPropertyChanged(nameof(CameraTypes));
                     }
+                    else
+                    {
+                        return;
+                    }
 
                 }
 
             }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Dispatch(() => Application.Current.MainPage.DisplayAlert("Error", ex.Message, "Ok"));
+            }
             finally
             {
                 IsBusy = false;
-                await base.Initialize(parameter);
+                await base.Initialize();
             }
 
 
